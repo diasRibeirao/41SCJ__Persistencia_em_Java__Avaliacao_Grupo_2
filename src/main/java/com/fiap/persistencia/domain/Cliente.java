@@ -24,14 +24,14 @@ public class Cliente implements Serializable {
 	private Integer id;
 
 	@Column(unique = true)
-	private String cpf;
+	private String cpfOuCnpj;
 
 	private String nome;
 
 	private String email;
 
 	private Integer tipo;
-	
+
 	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
 	private List<Endereco> enderecos = new ArrayList<>();
 
@@ -43,9 +43,9 @@ public class Cliente implements Serializable {
 
 	}
 
-	public Cliente(Integer id, String cpf, String nome, String email, TipoCliente tipo) {
+	public Cliente(Integer id, String cpfOuCnpj, String nome, String email, TipoCliente tipo) {
 		this.id = id;
-		this.cpf = cpf;
+		this.cpfOuCnpj = cpfOuCnpj;
 		this.nome = nome;
 		this.email = email;
 		this.tipo = (tipo == null) ? null : tipo.getId();
@@ -59,12 +59,12 @@ public class Cliente implements Serializable {
 		this.id = id;
 	}
 
-	public String getCpf() {
-		return cpf;
+	public String getCpfOuCnpj() {
+		return cpfOuCnpj;
 	}
 
-	public void setCpf(String cpf) {
-		this.cpf = cpf;
+	public void setCpfOuCnpj(String cpfOuCnpj) {
+		this.cpfOuCnpj = cpfOuCnpj;
 	}
 
 	public String getNome() {
@@ -83,12 +83,12 @@ public class Cliente implements Serializable {
 		this.email = email;
 	}
 
-	public TipoCliente getTipo() {
-		return TipoCliente.toEnum(tipo);
+	public Integer getTipo() {
+		return tipo;
 	}
 
-	public void setTipo(TipoCliente tipo) {
-		this.tipo = tipo.getId();
+	public void setTipo(Integer tipo) {
+		this.tipo = tipo;
 	}
 
 	public List<Endereco> getEnderecos() {
