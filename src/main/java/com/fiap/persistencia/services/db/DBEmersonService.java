@@ -73,9 +73,9 @@ public class DBEmersonService {
 						estado10, estado11, estado12, estado13, estado14, estado15, estado16, estado17, estado18,
 						estado19, estado20, estado21, estado22, estado23, estado24, estado25, estado26, estado27));
 
-		Cidade cidade1 = new Cidade(null, "São Paulo", estado24);
-		Cidade cidade2 = new Cidade(null, "Ourinhos", estado24);
-		Cidade cidade3 = new Cidade(null, "Uberlândia", estado12);
+		Cidade cidade1 = new Cidade("São Paulo", estado24);
+		Cidade cidade2 = new Cidade("Ourinhos", estado24);
+		Cidade cidade3 = new Cidade("Uberlândia", estado12);
 
 		estado24.getCidades().addAll(Arrays.asList(cidade1, cidade2));
 		estado12.getCidades().addAll(Arrays.asList(cidade3));
