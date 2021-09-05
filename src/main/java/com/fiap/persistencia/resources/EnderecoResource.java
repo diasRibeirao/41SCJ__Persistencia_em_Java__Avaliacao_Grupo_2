@@ -18,13 +18,12 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.fiap.persistencia.domain.Pais;
 import com.fiap.persistencia.domain.dto.PaisDTO;
-import com.fiap.persistencia.resources.exceptions.EnderecoService;
 
 @RestController
 @RequestMapping(value = "/endereco")
 public class EnderecoResource {
 	@Autowired
-	private EnderecoService ederecoService;
+	private EnderecoService enderecoService;
 
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<PaisDTO>> findAll() {

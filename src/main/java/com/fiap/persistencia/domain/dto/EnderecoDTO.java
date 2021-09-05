@@ -9,12 +9,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fiap.persistencia.domain.Cidade;
 import com.fiap.persistencia.domain.Cliente;
 import com.fiap.persistencia.domain.Endereco;
-import com.fiap.persistencia.domain.Pais;
 
 import lombok.Data;
 
 @Data
-public class EderecoDTO implements Serializable {
+public class EnderecoDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Integer id;
@@ -40,16 +39,91 @@ public class EderecoDTO implements Serializable {
 	@JoinColumn(name = "cidade_id")
 	private Cidade cidade;
 
-	public EderecoDTO(Endereco obj) {
-		this.id = obj.getid;
-		this.logradouro = obj.getlogradouro;
-		this.numero = obj.getnumero;
-		this.complemento = obj.getcomplemento;
-		this.bairro = obj.getbairro;
-		this.cep = obj.getcep;
-		this.principal = obj.getprincipal;
-		this.cliente = obj.getcliente;
-	}
 	public EnderecoDTO() {
 
 	}
+
+	public EnderecoDTO(Endereco obj) {
+		this.id = obj.getId();
+		this.logradouro = obj.getLogradouro();
+		this.numero = obj.getNumero();
+		this.complemento = obj.getComplemento();
+		this.bairro = obj.getBairro();
+		this.cep = obj.getCep();
+		this.principal = obj.getPrincipal();
+		this.cliente = obj.getCliente();
+		this.cidade = obj.getCidade();
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getLogradouro() {
+		return logradouro;
+	}
+
+	public void setLogradouro(String logradouro) {
+		this.logradouro = logradouro;
+	}
+
+	public String getNumero() {
+		return numero;
+	}
+
+	public void setNumero(String numero) {
+		this.numero = numero;
+	}
+
+	public String getComplemento() {
+		return complemento;
+	}
+
+	public void setComplemento(String complemento) {
+		this.complemento = complemento;
+	}
+
+	public String getBairro() {
+		return bairro;
+	}
+
+	public void setBairro(String bairro) {
+		this.bairro = bairro;
+	}
+
+	public String getCep() {
+		return cep;
+	}
+
+	public void setCep(String cep) {
+		this.cep = cep;
+	}
+
+	public Boolean getPrincipal() {
+		return principal;
+	}
+
+	public void setPrincipal(Boolean principal) {
+		this.principal = principal;
+	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+
+	public Cidade getCidade() {
+		return cidade;
+	}
+
+	public void setCidade(Cidade cidade) {
+		this.cidade = cidade;
+	}
+}
