@@ -2,32 +2,19 @@ package com.fiap.persistencia.domain.dto;
 
 import java.io.Serializable;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
-import com.fiap.persistencia.services.validation.ClienteInsert;
+import com.fiap.persistencia.services.validation.EnderecoInsert;
 
-@ClienteInsert
-public class ClienteNewDTO implements Serializable {
+@EnderecoInsert
+public class EnderecoNewDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@NotEmpty(message = "Preenchimento obrigatório")
-	private String cpfOuCnpj;
-
-	@NotEmpty(message = "Preenchimento obrigatório")
-	@Length(min = 5, max = 120, message = "O tamanho deve ser entre 5 e 120 caracteres")
-	private String nome;
-
-	@NotEmpty(message = "Preenchimento obrigatório")
-	@Email(message = "Email inválido")
-	private String email;
-
-	private Integer tipo;
-
-	@NotEmpty(message = "Preenchimento obrigatório")
+	@Length(min = 5, max = 80, message = "O tamanho deve ser entre 5 e 80 caracteres")
 	private String logradouro;
 
 	@NotEmpty(message = "Preenchimento obrigatório")
@@ -45,41 +32,13 @@ public class ClienteNewDTO implements Serializable {
 	private Boolean principal;
 
 	@NotNull(message = "Preenchimento obrigatório")
+	private Integer clienteId;
+
+	@NotNull(message = "Preenchimento obrigatório")
 	private Integer cidadeId;
 
-	public ClienteNewDTO() {
-	}
+	public EnderecoNewDTO() {
 
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getCpfOuCnpj() {
-		return cpfOuCnpj;
-	}
-
-	public void setCpfOuCnpj(String cpfOuCnpj) {
-		this.cpfOuCnpj = cpfOuCnpj;
-	}
-
-	public Integer getTipo() {
-		return tipo;
-	}
-
-	public void setTipo(Integer tipo) {
-		this.tipo = tipo;
 	}
 
 	public String getLogradouro() {
@@ -130,6 +89,14 @@ public class ClienteNewDTO implements Serializable {
 		this.principal = principal;
 	}
 
+	public Integer getClienteId() {
+		return clienteId;
+	}
+
+	public void setClienteId(Integer clienteId) {
+		this.clienteId = clienteId;
+	}
+
 	public Integer getCidadeId() {
 		return cidadeId;
 	}
@@ -137,5 +104,7 @@ public class ClienteNewDTO implements Serializable {
 	public void setCidadeId(Integer cidadeId) {
 		this.cidadeId = cidadeId;
 	}
+
+	
 
 }

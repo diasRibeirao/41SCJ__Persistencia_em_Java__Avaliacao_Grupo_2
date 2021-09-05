@@ -29,7 +29,7 @@ public class ClienteUpdateValidator implements ConstraintValidator<ClienteUpdate
 	}
 
 	@Override
-	public boolean isValid(ClienteDTO objDto, ConstraintValidatorContext context) {
+	public boolean isValid(ClienteDTO clienteDTO, ConstraintValidatorContext context) {
 
 		@SuppressWarnings("unchecked")
 		Map<String, String> map = (Map<String, String>) request
@@ -38,7 +38,7 @@ public class ClienteUpdateValidator implements ConstraintValidator<ClienteUpdate
 
 		List<FieldMessage> list = new ArrayList<>();
 
-		Cliente aux = clienteRepository.findByEmail(objDto.getEmail());
+		Cliente aux = clienteRepository.findByEmail(clienteDTO.getEmail());
 		if (aux != null && !aux.getId().equals(uriId)) {
 			list.add(new FieldMessage("email", "Email já existente"));
 		}

@@ -7,10 +7,9 @@ import javax.persistence.ManyToOne;
 
 import com.fiap.persistencia.domain.Cidade;
 import com.fiap.persistencia.domain.Endereco;
+import com.fiap.persistencia.services.validation.EnderecoUpdate;
 
-import lombok.Data;
-
-@Data
+@EnderecoUpdate
 public class EnderecoDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 

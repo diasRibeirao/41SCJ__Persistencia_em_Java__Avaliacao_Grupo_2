@@ -11,8 +11,11 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import com.fiap.persistencia.domain.Cidade;
+import com.fiap.persistencia.domain.Cliente;
 import com.fiap.persistencia.domain.Endereco;
 import com.fiap.persistencia.domain.dto.EnderecoDTO;
+import com.fiap.persistencia.domain.dto.EnderecoNewDTO;
 import com.fiap.persistencia.repositories.EnderecoRepository;
 import com.fiap.persistencia.services.exceptions.DataIntegrityException;
 import com.fiap.persistencia.services.exceptions.ObjectNotFoundException;
@@ -22,9 +25,6 @@ public class EnderecoService {
 
 	@Autowired
 	private EnderecoRepository enderecoRepository;
-
-	@Autowired
-	private ClienteService clienteService;
 
 	@Cacheable(value = "enderecoCache", key = "#id")
 	public Endereco find(Integer id) {
@@ -67,7 +67,13 @@ public class EnderecoService {
 	public Endereco fromDTO(EnderecoDTO enderecoDTO) {
 		return new Endereco(enderecoDTO.getId(), enderecoDTO.getLogradouro(), enderecoDTO.getNumero(),
 				enderecoDTO.getComplemento(), enderecoDTO.getBairro(), enderecoDTO.getCep(), enderecoDTO.getPrincipal(),
-				clienteService.find(enderecoDTO.getCliente().getId()), enderecoDTO.getCidade());
+				new Cliente(enderecoDTO.getCliente().getId()), new Cidade(enderecoDTO.getCidade().getId()));
+	}
+	
+	public Endereco fromDTO(EnderecoNewDTO enderecoNewDTO) {
+		return new Endereco(null, enderecoNewDTO.getLogradouro(), enderecoNewDTO.getNumero(),
+				enderecoNewDTO.getComplemento(), enderecoNewDTO.getBairro(), enderecoNewDTO.getCep(), enderecoNewDTO.getPrincipal(),
+				new Cliente(enderecoNewDTO.getClienteId()), new Cidade(enderecoNewDTO.getCidadeId()));
 	}
 
 	private void updateData(Endereco newEndereco, Endereco endereco) {

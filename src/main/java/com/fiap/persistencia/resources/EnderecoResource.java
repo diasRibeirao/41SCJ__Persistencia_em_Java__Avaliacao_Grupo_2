@@ -18,6 +18,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.fiap.persistencia.domain.Endereco;
 import com.fiap.persistencia.domain.dto.EnderecoDTO;
+import com.fiap.persistencia.domain.dto.EnderecoNewDTO;
 import com.fiap.persistencia.services.EnderecoService;
 
 import io.swagger.annotations.Api;
@@ -47,8 +48,8 @@ public class EnderecoResource {
 
 	@ApiOperation(value = "Inserir um endereço", tags = { "Endereços"})
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> insert(@Valid @RequestBody EnderecoDTO enderecoDTO) {
-		Endereco endereco = enderecoService.fromDTO(enderecoDTO);
+	public ResponseEntity<Void> insert(@Valid @RequestBody EnderecoNewDTO enderecoNewDTO) {
+		Endereco endereco = enderecoService.fromDTO(enderecoNewDTO);
 		endereco = enderecoService.insert(endereco);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(endereco.getId())
 				.toUri();
