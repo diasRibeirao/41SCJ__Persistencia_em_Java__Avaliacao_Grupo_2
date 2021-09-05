@@ -4,6 +4,10 @@ import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
@@ -31,12 +35,15 @@ public class PedidoService {
 	@Autowired
 	private ClienteService clienteService;
 	
+	@Cacheable(value= "pedidoCache", key= "#id")
 	public Pedido find(Integer id) {
 		Optional<Pedido> obj = pedidoRepository.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! Id: " + id + ", Tipo: " + Pedido.class.getName()));
 	}
-
+	@Caching(
+			 put= { @CachePut(value= "pedidoCache", key= "#pedido.id")} 
+		)
 	public Pedido insert(Pedido obj) {
 		obj.setId(null);
 		obj.setData(new Date());
