@@ -4,6 +4,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -19,27 +23,40 @@ public class PaisService {
 	@Autowired
 	private PaisRepository paisRepository;
 
+	@Cacheable(value= "paisCache", key= "#id")
 	public Pais find(Integer id) {
 		Optional<Pais> obj = paisRepository.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! Id: " + id + ", Tipo: " + Pais.class.getName()));
 	}
-
+	
+	@Cacheable(value= "allPaissCache", unless= "#result.size() == 0")
 	public List<Pais> findAll() {
 		return paisRepository.findAll();
 	}
-
+	@Caching(
+			 put= { @CachePut(value= "paisCache", key= "#cliente.id") },
+			 evict= { @CacheEvict(value= "allPaisCache", allEntries= true) } 
+		)
 	public Pais insert(Pais obj) {
 		obj.setId(null);
 		return paisRepository.save(obj);
 	}
-
+	@Caching(
+			 put= { @CachePut(value= "paisCache", key= "#pais.id") },
+			 evict= { @CacheEvict(value= "allPaisCache", allEntries= true) }
+		)
 	public Pais update(Pais obj) {
 		Pais newObj = find(obj.getId());
 		updateData(newObj, obj);
 		return paisRepository.save(newObj);
 	}
-
+	@Caching(
+			evict= { 
+				@CacheEvict(value= "paisCache", key= "#id"),
+				@CacheEvict(value= "allPaisCache", allEntries= true)
+			}
+		)
 	public void delete(Integer id) {
 		find(id);
 		try {
