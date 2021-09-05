@@ -5,9 +5,7 @@ import java.io.Serializable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fiap.persistencia.domain.Cidade;
-import com.fiap.persistencia.domain.Cliente;
 import com.fiap.persistencia.domain.Endereco;
 
 import lombok.Data;
@@ -30,10 +28,9 @@ public class EnderecoDTO implements Serializable {
 
 	private Boolean principal;
 
-	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "cliente_id")
-	private Cliente cliente;
+	private ClienteDTO cliente;
 
 	@ManyToOne
 	@JoinColumn(name = "cidade_id")
@@ -51,7 +48,7 @@ public class EnderecoDTO implements Serializable {
 		this.bairro = obj.getBairro();
 		this.cep = obj.getCep();
 		this.principal = obj.getPrincipal();
-		this.cliente = obj.getCliente();
+		this.cliente = new ClienteDTO(obj.getCliente());
 		this.cidade = obj.getCidade();
 	}
 
@@ -111,11 +108,11 @@ public class EnderecoDTO implements Serializable {
 		this.principal = principal;
 	}
 
-	public Cliente getCliente() {
+	public ClienteDTO getCliente() {
 		return cliente;
 	}
 
-	public void setCliente(Cliente cliente) {
+	public void setCliente(ClienteDTO cliente) {
 		this.cliente = cliente;
 	}
 

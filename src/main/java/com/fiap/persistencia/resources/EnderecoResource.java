@@ -17,9 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.fiap.persistencia.domain.Endereco;
-import com.fiap.persistencia.domain.Pais;
 import com.fiap.persistencia.domain.dto.EnderecoDTO;
-import com.fiap.persistencia.domain.dto.PaisDTO;
 import com.fiap.persistencia.services.EnderecoService;
 
 import io.swagger.annotations.Api;

@@ -30,43 +30,35 @@ public class ClienteService {
 	@Autowired
 	private CidadeService cidadeService;
 
-	@Cacheable(value= "clienteCache", key= "#id")
+	@Cacheable(value = "clienteCache", key = "#id")
 	public Cliente find(Integer id) {
 		Optional<Cliente> clientes = clienteRepository.findById(id);
 		return clientes.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! Id: " + id + ", Tipo: " + Cliente.class.getName()));
 	}
 
-	@Cacheable(value= "allClientesCache", unless= "#result.size() == 0")
+	@Cacheable(value = "allClientesCache", unless = "#result.size() == 0")
 	public List<Cliente> findAll() {
 		return clienteRepository.findAll();
 	}
 
-	@Caching(
-		 put= { @CachePut(value= "clienteCache", key= "#cliente.id") },
-		 evict= { @CacheEvict(value= "allClientesCache", allEntries= true) } 
-	)
+	@Caching(put = { @CachePut(value = "clienteCache", key = "#cliente.id") }, evict = {
+			@CacheEvict(value = "allClientesCache", allEntries = true) })
 	public Cliente insert(Cliente cliente) {
 		cliente.setId(null);
 		return clienteRepository.save(cliente);
 	}
 
-	@Caching(
-		 put= { @CachePut(value= "clienteCache", key= "#cliente.id") },
-		 evict= { @CacheEvict(value= "allClientesCache", allEntries= true) }
-	)
+	@Caching(put = { @CachePut(value = "clienteCache", key = "#cliente.id") }, evict = {
+			@CacheEvict(value = "allClientesCache", allEntries = true) })
 	public Cliente update(Cliente cliente) {
 		Cliente newObj = find(cliente.getId());
 		updateData(newObj, cliente);
 		return clienteRepository.save(newObj);
 	}
 
-	@Caching(
-		evict= { 
-			@CacheEvict(value= "clienteCache", key= "#id"),
-			@CacheEvict(value= "allClientesCache", allEntries= true)
-		}
-	)
+	@Caching(evict = { @CacheEvict(value = "clienteCache", key = "#id"),
+			@CacheEvict(value = "allClientesCache", allEntries = true) })
 	public void delete(Integer id) {
 		find(id);
 		try {
@@ -76,23 +68,24 @@ public class ClienteService {
 		}
 	}
 
-	public Cliente fromDTO(ClienteDTO objDto) {
-		return new Cliente(objDto.getId(), null, objDto.getNome(), objDto.getEmail(), null);
+	public Cliente fromDTO(ClienteDTO clienteDTO) {
+		return new Cliente(clienteDTO.getId(), null, clienteDTO.getNome(), clienteDTO.getEmail(), null);
 	}
 
-	public Cliente fromDTO(ClienteNewDTO objDto) {
-		Cliente cli = new Cliente(null, objDto.getCpfOuCnpj(), objDto.getNome(), objDto.getEmail(),
-				TipoCliente.toEnum(objDto.getTipo()));
-		Cidade cid = cidadeService.find(objDto.getCidadeId());
-		Endereco end = new Endereco(null, objDto.getLogradouro(), objDto.getNumero(), objDto.getComplemento(),
-				objDto.getBairro(), objDto.getCep(), objDto.getPrincipal(), cli, cid);
+	public Cliente fromDTO(ClienteNewDTO clienteNewDTO) {
+		Cliente cli = new Cliente(null, clienteNewDTO.getCpfOuCnpj(), clienteNewDTO.getNome(), clienteNewDTO.getEmail(),
+				TipoCliente.toEnum(clienteNewDTO.getTipo()));
+		Cidade cid = cidadeService.find(clienteNewDTO.getCidadeId());
+		Endereco end = new Endereco(null, clienteNewDTO.getLogradouro(), clienteNewDTO.getNumero(),
+				clienteNewDTO.getComplemento(), clienteNewDTO.getBairro(), clienteNewDTO.getCep(),
+				clienteNewDTO.getPrincipal(), cli, cid);
 		cli.getEnderecos().add(end);
 		return cli;
 	}
 
-	private void updateData(Cliente newObj, Cliente obj) {
-		newObj.setNome(obj.getNome());
-		newObj.setEmail(obj.getEmail());
+	private void updateData(Cliente newCliente, Cliente cliente) {
+		newCliente.setNome(cliente.getNome());
+		newCliente.setEmail(cliente.getEmail());
 	}
 
 }

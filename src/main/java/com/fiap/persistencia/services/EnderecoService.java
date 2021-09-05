@@ -23,43 +23,38 @@ public class EnderecoService {
 	@Autowired
 	private EnderecoRepository enderecoRepository;
 
-	@Cacheable(value= "enderecoCache", key= "#id")
+	@Autowired
+	private ClienteService clienteService;
+
+	@Cacheable(value = "enderecoCache", key = "#id")
 	public Endereco find(Integer id) {
 		Optional<Endereco> obj = enderecoRepository.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! Id: " + id + ", Tipo: " + Endereco.class.getName()));
 	}
 
-	@Cacheable(value= "allEnderecoCache", unless= "#result.size() == 0")
+	@Cacheable(value = "allEnderecoCache", unless = "#result.size() == 0")
 	public List<Endereco> findAll() {
 		return enderecoRepository.findAll();
 	}
 
-	@Caching(
-		 put= { @CachePut(value= "enderecoCache", key= "#endereco.id") },
-		 evict= { @CacheEvict(value= "allEnderecoCache", allEntries= true) } 
-	)
+	@Caching(put = { @CachePut(value = "enderecoCache", key = "#endereco.id") }, evict = {
+			@CacheEvict(value = "allEnderecoCache", allEntries = true) })
 	public Endereco insert(Endereco endereco) {
 		endereco.setId(null);
 		return enderecoRepository.save(endereco);
 	}
 
-	@Caching(
-		 put= { @CachePut(value= "enderecoCache", key= "#endereco.id") },
-		 evict= { @CacheEvict(value= "allEnderecoCache", allEntries= true) }
-	)
+	@Caching(put = { @CachePut(value = "enderecoCache", key = "#endereco.id") }, evict = {
+			@CacheEvict(value = "allEnderecoCache", allEntries = true) })
 	public Endereco update(Endereco endereco) {
 		Endereco newEndereco = find(endereco.getId());
 		updateData(newEndereco, endereco);
 		return enderecoRepository.save(newEndereco);
 	}
 
-	@Caching(
-		evict= { 
-			@CacheEvict(value= "enderecoCache", key= "#id"),
-			@CacheEvict(value= "allEnderecoCache", allEntries= true)
-		}
-	)
+	@Caching(evict = { @CacheEvict(value = "enderecoCache", key = "#id"),
+			@CacheEvict(value = "allEnderecoCache", allEntries = true) })
 	public void delete(Integer id) {
 		find(id);
 		try {
@@ -69,20 +64,21 @@ public class EnderecoService {
 		}
 	}
 
-	public Endereco fromDTO(EnderecoDTO objDto) {
-		return new Endereco(objDto.getId(), objDto.getLogradouro(), objDto.getNumero(), objDto.getComplemento(),
-				objDto.getBairro(), objDto.getCep(), objDto.getPrincipal(), objDto.getCliente(), objDto.getCidade());
+	public Endereco fromDTO(EnderecoDTO enderecoDTO) {
+		return new Endereco(enderecoDTO.getId(), enderecoDTO.getLogradouro(), enderecoDTO.getNumero(),
+				enderecoDTO.getComplemento(), enderecoDTO.getBairro(), enderecoDTO.getCep(), enderecoDTO.getPrincipal(),
+				clienteService.find(enderecoDTO.getCliente().getId()), enderecoDTO.getCidade());
 	}
 
-	private void updateData(Endereco newObj, Endereco obj) {		
-		newObj.setLogradouro(obj.getLogradouro());
-		newObj.setNumero(obj.getNumero());
-		newObj.setComplemento(obj.getComplemento());
-		newObj.setBairro(obj.getBairro());
-		newObj.setCep(obj.getCep());
-		newObj.setPrincipal(obj.getPrincipal());
-		newObj.setCliente(obj.getCliente());
-		newObj.setCidade(obj.getCidade());
+	private void updateData(Endereco newEndereco, Endereco endereco) {
+		newEndereco.setLogradouro(endereco.getLogradouro());
+		newEndereco.setNumero(endereco.getNumero());
+		newEndereco.setComplemento(endereco.getComplemento());
+		newEndereco.setBairro(endereco.getBairro());
+		newEndereco.setCep(endereco.getCep());
+		newEndereco.setPrincipal(endereco.getPrincipal());
+		newEndereco.setCliente(endereco.getCliente());
+		newEndereco.setCidade(endereco.getCidade());
 	}
 
 }
