@@ -42,13 +42,6 @@ public class PedidoResource {
 		return ResponseEntity.ok().body(obj);
 	}
 
-	@ApiOperation(value = "Buscar os pedidos do cliente", tags = { "Pedidos" })
-	@RequestMapping(value = "/{idCliente}", method = RequestMethod.GET)
-	public ResponseEntity<List<Pedido>> findByCliente(@PathVariable Integer idCliente) {
-		List<Pedido> list = pedidoService.findByCliente(idCliente);
-		return ResponseEntity.ok().body(list);
-	}
-
 	@ApiOperation(value = "Inserir um pedido", tags = { "País" })
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> insert(@Valid @RequestBody Pedido pedido) {
