@@ -14,8 +14,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fiap.persistencia.services.validation.PedidoInsert;
 
 @Entity
+@PedidoInsert
 public class Pedido implements Serializable {
 	private static final long serialVersionUID = 1L;
 
