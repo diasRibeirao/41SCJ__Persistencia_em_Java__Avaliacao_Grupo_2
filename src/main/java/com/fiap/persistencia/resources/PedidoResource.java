@@ -1,6 +1,8 @@
 package com.fiap.persistencia.resources;
 
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -15,12 +17,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.fiap.persistencia.domain.Pais;
 import com.fiap.persistencia.domain.Pedido;
+import com.fiap.persistencia.domain.dto.PaisDTO;
 import com.fiap.persistencia.services.PedidoService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-
 
 @RestController
 @Api(value = "Pedidos", description = "APIs Pedidos", tags = { "Pedidos" })
@@ -30,30 +33,33 @@ public class PedidoResource {
 	@Autowired
 	private PedidoService pedidoService;
 
-	@ApiOperation(value = "Listar todos os clientes", tags = { "Pedidos"})
+	@ApiOperation(value = "Listar todos os pedidos", tags = { "Pedidos" })
+	@RequestMapping(method = RequestMethod.GET)
+	public ResponseEntity<List<Pedido>> findAll() {
+		List<Pedido> list = pedidoService.findAll();
+		return ResponseEntity.ok().body(list);
+	}
+
+	@ApiOperation(value = "Buscar o pedido pelo id", tags = { "Pedidos" })
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Pedido> find(@PathVariable Integer id) {
 		Pedido obj = pedidoService.find(id);
 		return ResponseEntity.ok().body(obj);
 	}
-	
-	@ApiOperation(value = "Buscar o pedido pelo id", tags = { "Pedidos"})
-	@RequestMapping(method=RequestMethod.POST)
-	public ResponseEntity<Void> insert(@Valid @RequestBody Pedido obj) {
-		obj = pedidoService.insert(obj);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
-		return ResponseEntity.created(uri).build();
-	}
-	
-	@ApiOperation(value = "Buscar os pedidos doo cliente", tags = { "Pedidos"})
-	@RequestMapping(method=RequestMethod.GET)
-	public ResponseEntity<Page<Pedido>> findPage(
-			@RequestParam(value="idCliente") Integer idCliente, 
-			@RequestParam(value="page", defaultValue="0") Integer page, 
-			@RequestParam(value="linesPerPage", defaultValue="24") Integer linesPerPage, 
-			@RequestParam(value="orderBy", defaultValue="instante") String orderBy, 
-			@RequestParam(value="direction", defaultValue="DESC") String direction) {
-		Page<Pedido> list = pedidoService.findPage(idCliente, page, linesPerPage, orderBy, direction);
+
+	@ApiOperation(value = "Buscar os pedidos do cliente", tags = { "Pedidos" })
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	public ResponseEntity<List<Pedido>> findByCliente(@PathVariable Integer idCliente) {
+		List<Pedido> list = pedidoService.findByCliente(idCliente);
 		return ResponseEntity.ok().body(list);
 	}
+
+	@ApiOperation(value = "Inserir um pedido", tags = { "País" })
+	@RequestMapping(method = RequestMethod.POST)
+	public ResponseEntity<Void> insert(@Valid @RequestBody Pedido pedido) {
+		pedido = pedidoService.insert(pedido);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(pedido.getId()).toUri();
+		return ResponseEntity.created(uri).build();
+	}
+
 }

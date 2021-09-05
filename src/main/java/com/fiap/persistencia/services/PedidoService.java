@@ -1,16 +1,13 @@
 package com.fiap.persistencia.services;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.fiap.persistencia.domain.Cliente;
@@ -41,6 +38,18 @@ public class PedidoService {
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! Id: " + id + ", Tipo: " + Pedido.class.getName()));
 	}
+	
+	@Cacheable(value = "allPedidosCache", unless = "#result.size() == 0")
+	public List<Pedido> findAll() {
+		return pedidoRepository.findAll();
+	}
+	
+	@Cacheable(value = "allPedidosCache", unless = "#result.size() == 0")
+	public List<Pedido> findByCliente(Integer idClienten) {
+		Cliente cliente =  clienteService.find(idClienten);
+		return pedidoRepository.findByCliente(cliente);
+	}
+	
 	@Caching(
 			 put= { @CachePut(value= "pedidoCache", key= "#pedido.id")} 
 		)
@@ -60,9 +69,5 @@ public class PedidoService {
 		return obj;
 	}
 	
-	public Page<Pedido> findPage(Integer idCliente, Integer page, Integer linesPerPage, String orderBy, String direction) {
-		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
-		Cliente cliente =  clienteService.find(idCliente);
-		return pedidoRepository.findByCliente(cliente, pageRequest);
-	}
+	
 }
