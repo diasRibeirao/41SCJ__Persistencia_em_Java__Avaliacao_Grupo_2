@@ -24,7 +24,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@Api(value = "Clientes", description = "APIs Cliente", tags = { "Clientes" })
+@Api(value = "Clientes", description = "APIs Clientes", tags = { "Clientes" })
 @RequestMapping(value = "/clientes")
 public class ClienteResource {
 
