@@ -6,14 +6,11 @@ import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.validator.constraints.Length;
 
-import com.fiap.persistencia.domain.Pais;
-import com.fiap.persistencia.services.validation.PaisUpdate;
+import com.fiap.persistencia.services.validation.PaisInsert;
 
-@PaisUpdate
-public class PaisDTO implements Serializable {
+@PaisInsert
+public class PaisNewDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	private Integer id;
 
 	@NotEmpty(message = "Preenchimento obrigatório")
 	@Length(min = 2, max = 2, message = "O tamanho deve ser 2 caracteres")
@@ -23,22 +20,8 @@ public class PaisDTO implements Serializable {
 	@Length(min = 5, max = 80, message = "O tamanho deve ser entre 5 e 80 caracteres")
 	private String nome;
 
-	public PaisDTO() {
+	public PaisNewDTO() {
 
-	}
-
-	public PaisDTO(Pais pais) {
-		this.id = pais.getId();
-		this.sigla = pais.getSigla();
-		this.nome = pais.getNome();
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
 	}
 
 	public String getSigla() {

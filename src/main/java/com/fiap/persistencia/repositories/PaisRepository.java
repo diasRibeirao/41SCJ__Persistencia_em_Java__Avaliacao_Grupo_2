@@ -5,13 +5,13 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fiap.persistencia.domain.Pais;
-import com.fiap.persistencia.domain.Produto;
 
 @Repository
 public interface PaisRepository extends JpaRepository<Pais, Integer> {
+	
 	@Transactional(readOnly=true) 
-	Produto findByNome(String nome);
+	Pais findByNome(String nome);
 	
 	@Transactional(readOnly=true)
-	Produto findBySigla(String sigla);
+	Pais findBySigla(String sigla);
 }

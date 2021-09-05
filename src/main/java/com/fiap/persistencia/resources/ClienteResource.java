@@ -57,10 +57,10 @@ public class ClienteResource {
 
 	@ApiOperation(value = "Atualizar um cliente", tags = { "Clientes"})
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<Void> update(@Valid @RequestBody ClienteDTO objDto, @PathVariable Integer id) {
-		Cliente obj = clienteService.fromDTO(objDto);
-		obj.setId(id);
-		obj = clienteService.update(obj);
+	public ResponseEntity<Void> update(@Valid @RequestBody ClienteDTO clienteDTO, @PathVariable Integer id) {
+		Cliente cliente = clienteService.fromDTO(clienteDTO);
+		cliente.setId(id);
+		cliente = clienteService.update(cliente);
 		return ResponseEntity.noContent().build();
 	}
 

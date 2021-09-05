@@ -25,13 +25,13 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@Api(value = "Endereços", description = "APIs Endereços", tags = { "Enderecos" })
+@Api(value = "Endereços", description = "APIs Endereços", tags = { "Endereços" })
 @RequestMapping(value = "/enderecos")
 public class EnderecoResource {
 	@Autowired
 	private EnderecoService enderecoService;
 
-	@ApiOperation(value = "Listar todos os endereços", tags = { "Enderecos"})
+	@ApiOperation(value = "Listar todos os endereços", tags = { "Endereços"})
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<EnderecoDTO>> findAll() {
 		List<Endereco> list = enderecoService.findAll();
@@ -39,14 +39,14 @@ public class EnderecoResource {
 		return ResponseEntity.ok().body(listDto);
 	}
 
-	@ApiOperation(value = "Buscar o endereço pelo id", tags = { "Enderecos"})
+	@ApiOperation(value = "Buscar o endereço pelo id", tags = { "Endereços"})
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Endereco> find(@PathVariable Integer id) {
 		Endereco endereco = enderecoService.find(id);
 		return ResponseEntity.ok().body(endereco);
 	}
 
-	@ApiOperation(value = "Inserir um endereço", tags = { "Enderecos"})
+	@ApiOperation(value = "Inserir um endereço", tags = { "Endereços"})
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> insert(@Valid @RequestBody EnderecoNewDTO enderecoNewDTO) {
 		Endereco endereco = enderecoService.fromDTO(enderecoNewDTO);
@@ -56,7 +56,7 @@ public class EnderecoResource {
 		return ResponseEntity.created(uri).build();
 	}
 
-	@ApiOperation(value = "Atualizar um endereço", tags = { "Enderecos"})
+	@ApiOperation(value = "Atualizar um endereço", tags = { "Endereços"})
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Void> update(@Valid @RequestBody EnderecoDTO enderecoDTO, @PathVariable Integer id) {
 		Endereco endereco = enderecoService.fromDTO(enderecoDTO);
@@ -65,7 +65,7 @@ public class EnderecoResource {
 		return ResponseEntity.noContent().build();
 	}
 
-	@ApiOperation(value = "Deletar um endereço", tags = { "Enderecos"})
+	@ApiOperation(value = "Deletar um endereço", tags = { "Endereços"})
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> delete(@PathVariable Integer id) {
 		enderecoService.delete(id);

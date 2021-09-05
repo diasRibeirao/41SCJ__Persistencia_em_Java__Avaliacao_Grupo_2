@@ -18,20 +18,26 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.fiap.persistencia.domain.Pedido;
 import com.fiap.persistencia.services.PedidoService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 
 @RestController
+@Api(value = "Pedidos", description = "APIs Pedidos", tags = { "Pedidos" })
 @RequestMapping(value = "/pedidos")
 public class PedidoResource {
 
 	@Autowired
 	private PedidoService pedidoService;
 
+	@ApiOperation(value = "Listar todos os clientes", tags = { "Pedidos"})
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Pedido> find(@PathVariable Integer id) {
 		Pedido obj = pedidoService.find(id);
 		return ResponseEntity.ok().body(obj);
 	}
 	
+	@ApiOperation(value = "Buscar o pedido pelo id", tags = { "Pedidos"})
 	@RequestMapping(method=RequestMethod.POST)
 	public ResponseEntity<Void> insert(@Valid @RequestBody Pedido obj) {
 		obj = pedidoService.insert(obj);
@@ -39,6 +45,7 @@ public class PedidoResource {
 		return ResponseEntity.created(uri).build();
 	}
 	
+	@ApiOperation(value = "Buscar os pedidos doo cliente", tags = { "Pedidos"})
 	@RequestMapping(method=RequestMethod.GET)
 	public ResponseEntity<Page<Pedido>> findPage(
 			@RequestParam(value="idCliente") Integer idCliente, 

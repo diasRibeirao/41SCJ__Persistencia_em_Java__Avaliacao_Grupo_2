@@ -1,18 +1,12 @@
 package com.fiap.persistencia.domain.dto;
 
-import java.io.Serializable;
-
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import com.fiap.persistencia.domain.Produto;
-import com.fiap.persistencia.services.validation.ProdutoUpdate;
+import com.fiap.persistencia.services.validation.ProdutoInsert;
 
-@ProdutoUpdate
-public class ProdutoDTO implements Serializable {
-	private static final long serialVersionUID = 1L;
-
-	private int id;
+@ProdutoInsert
+public class ProdutoNewDTO {
 
 	@NotEmpty(message = "Preenchimento obrigatório")
 	private String codigo;
@@ -26,23 +20,8 @@ public class ProdutoDTO implements Serializable {
 	@NotNull(message = "Preenchimento obrigatório")
 	private double valor;
 
-	public ProdutoDTO() {
-	}
+	public ProdutoNewDTO() {
 
-	public ProdutoDTO(Produto obj) {
-		this.id = obj.getId();
-		this.codigo = obj.getCodigo();
-		this.nome = obj.getNome();
-		this.quantidade = obj.getQuantidade();
-		this.valor = obj.getValor();
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
 	}
 
 	public String getCodigo() {

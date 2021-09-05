@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.fiap.persistencia.domain.Pais;
 import com.fiap.persistencia.domain.dto.PaisDTO;
+import com.fiap.persistencia.domain.dto.PaisNewDTO;
 import com.fiap.persistencia.repositories.PaisRepository;
 import com.fiap.persistencia.services.exceptions.DataIntegrityException;
 import com.fiap.persistencia.services.exceptions.ObjectNotFoundException;
@@ -23,40 +24,35 @@ public class PaisService {
 	@Autowired
 	private PaisRepository paisRepository;
 
-	@Cacheable(value= "paisCache", key= "#id")
+	@Cacheable(value = "paisCache", key = "#id")
 	public Pais find(Integer id) {
 		Optional<Pais> obj = paisRepository.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! Id: " + id + ", Tipo: " + Pais.class.getName()));
 	}
-	
-	@Cacheable(value= "allPaissCache", unless= "#result.size() == 0")
+
+	@Cacheable(value = "allPaisCache", unless = "#result.size() == 0")
 	public List<Pais> findAll() {
 		return paisRepository.findAll();
 	}
-	@Caching(
-			 put= { @CachePut(value= "paisCache", key= "#cliente.id") },
-			 evict= { @CacheEvict(value= "allPaisCache", allEntries= true) } 
-		)
-	public Pais insert(Pais obj) {
-		obj.setId(null);
-		return paisRepository.save(obj);
+
+	@Caching(put = { @CachePut(value = "paisCache", key = "#pais.id") }, evict = {
+			@CacheEvict(value = "allPaisCache", allEntries = true) })
+	public Pais insert(Pais pais) {
+		pais.setId(null);
+		return paisRepository.save(pais);
 	}
-	@Caching(
-			 put= { @CachePut(value= "paisCache", key= "#pais.id") },
-			 evict= { @CacheEvict(value= "allPaisCache", allEntries= true) }
-		)
-	public Pais update(Pais obj) {
-		Pais newObj = find(obj.getId());
-		updateData(newObj, obj);
-		return paisRepository.save(newObj);
+
+	@Caching(put = { @CachePut(value = "paisCache", key = "#pais.id") }, evict = {
+			@CacheEvict(value = "allPaisCache", allEntries = true) })
+	public Pais update(Pais pais) {
+		Pais newPais = find(pais.getId());
+		updateData(newPais, pais);
+		return paisRepository.save(newPais);
 	}
-	@Caching(
-			evict= { 
-				@CacheEvict(value= "paisCache", key= "#id"),
-				@CacheEvict(value= "allPaisCache", allEntries= true)
-			}
-		)
+
+	@Caching(evict = { @CacheEvict(value = "paisCache", key = "#id"),
+			@CacheEvict(value = "allPaisCache", allEntries = true) })
 	public void delete(Integer id) {
 		find(id);
 		try {
@@ -66,11 +62,13 @@ public class PaisService {
 		}
 	}
 
-	public Pais fromDTO(PaisDTO objDto) {
-		return new Pais(objDto.getId(), objDto.getSigla(), objDto.getNome());
+	public Pais fromDTO(PaisNewDTO paisNewDto) {
+		return new Pais(null, paisNewDto.getSigla(), paisNewDto.getNome());
 	}
 
-
+	public Pais fromDTO(PaisDTO paisDto) {
+		return new Pais(paisDto.getId(), paisDto.getSigla(), paisDto.getNome());
+	}
 
 	private void updateData(Pais newObj, Pais obj) {
 		newObj.setSigla(obj.getSigla());

@@ -12,12 +12,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.fiap.persistencia.domain.Cidade;
-import com.fiap.persistencia.domain.Cliente;
-import com.fiap.persistencia.domain.Endereco;
 import com.fiap.persistencia.domain.Estado;
 import com.fiap.persistencia.domain.dto.CidadeDTO;
-import com.fiap.persistencia.domain.dto.ClienteNewDTO;
-import com.fiap.persistencia.domain.enums.TipoCliente;
 import com.fiap.persistencia.repositories.CidadeRepository;
 import com.fiap.persistencia.repositories.EstadoRepository;
 import com.fiap.persistencia.services.exceptions.DataIntegrityException;
@@ -28,41 +24,38 @@ public class CidadeService {
 
 	@Autowired
 	private CidadeRepository cidadeRepository;
-	
+
 	private EstadoRepository estadoRepository;
-	@Cacheable(value= "cidadeCache", key= "#id")
+
+	@Cacheable(value = "cidadeCache", key = "#id")
 	public Cidade find(Integer id) {
 		Optional<Cidade> obj = cidadeRepository.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! Id: " + id + ", Tipo: " + Cidade.class.getName()));
 	}
-	@Cacheable(value= "allCidadesCache", unless= "#result.size() == 0")
+
+	@Cacheable(value = "allCidadesCache", unless = "#result.size() == 0")
 	public List<Cidade> findAll() {
 		return cidadeRepository.findAll();
 	}
-	@Caching(
-			 put= { @CachePut(value= "cidadeCache", key= "#cidade.id") },
-			 evict= { @CacheEvict(value= "allCidadesCache", allEntries= true) } 
-		)
-	public Cidade insert(Cidade obj) {
-		obj.setId(null);
-		return cidadeRepository.save(obj);
+
+	@Caching(put = { @CachePut(value = "cidadeCache", key = "#cidade.id") }, evict = {
+			@CacheEvict(value = "allCidadesCache", allEntries = true) })
+	public Cidade insert(Cidade cidade) {
+		cidade.setId(null);
+		return cidadeRepository.save(cidade);
 	}
-	@Caching(
-			 put= { @CachePut(value= "cidadeCache", key= "#cidade.id") },
-			 evict= { @CacheEvict(value= "allCidadesCache", allEntries= true) }
-		)
-	public Cidade update(Cidade obj) {
-		Cidade newObj = find(obj.getId());
-		updateData(newObj, obj);
-		return cidadeRepository.save(newObj);
+
+	@Caching(put = { @CachePut(value = "cidadeCache", key = "#cidade.id") }, evict = {
+			@CacheEvict(value = "allCidadesCache", allEntries = true) })
+	public Cidade update(Cidade cidade) {
+		Cidade newCidade = find(cidade.getId());
+		updateData(newCidade, cidade);
+		return cidadeRepository.save(newCidade);
 	}
-	@Caching(
-			evict= { 
-				@CacheEvict(value= "cidadeCache", key= "#id"),
-				@CacheEvict(value= "allCidadesCache", allEntries= true)
-			}
-		)
+
+	@Caching(evict = { @CacheEvict(value = "cidadeCache", key = "#id"),
+			@CacheEvict(value = "allCidadesCache", allEntries = true) })
 	public void delete(Integer id) {
 		find(id);
 		try {
@@ -73,7 +66,7 @@ public class CidadeService {
 	}
 
 	public Cidade fromDTO(CidadeDTO objDto) {
-		Cidade cidade = new Cidade(objDto.getId(),objDto.getNome());
+		Cidade cidade = new Cidade(objDto.getId(), objDto.getNome());
 		Estado estado = findEstadoById(objDto.getEstado_id());
 
 		cidade.setEstado(estado);
@@ -83,12 +76,11 @@ public class CidadeService {
 	private void updateData(Cidade newObj, Cidade obj) {
 		newObj.setNome(obj.getNome());
 	}
-	
-	
+
 	private Estado findEstadoById(Integer estado_Id) {
 		Optional<Estado> obj = estadoRepository.findById(estado_Id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! Id: " + estado_Id + ", Tipo: " + Estado.class.getName()));
 	}
-	
+
 }

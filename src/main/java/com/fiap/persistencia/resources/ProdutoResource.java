@@ -17,16 +17,21 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.fiap.persistencia.domain.Produto;
 import com.fiap.persistencia.domain.dto.ProdutoDTO;
+import com.fiap.persistencia.domain.dto.ProdutoNewDTO;
 import com.fiap.persistencia.services.ProdutoService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 @RestController
+@Api(value = "Produtos", description = "APIs Produtos", tags = { "Produtos" })
 @RequestMapping(value = "/produtos")
 public class ProdutoResource {
 
 	@Autowired
 	private ProdutoService produtoService;
 
-	
+	@ApiOperation(value = "Listar todos os produtos", tags = { "Produtos" })
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<ProdutoDTO>> findAll() {
 		List<Produto> list = produtoService.findAll();
@@ -34,28 +39,32 @@ public class ProdutoResource {
 		return ResponseEntity.ok().body(listDto);
 	}
 
+	@ApiOperation(value = "Buscar o produto pelo id", tags = { "Produtos" })
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Produto> find(@PathVariable Integer id) {
-		Produto obj = produtoService.find(id);
-		return ResponseEntity.ok().body(obj);
+		Produto produto = produtoService.find(id);
+		return ResponseEntity.ok().body(produto);
 	}
 
+	@ApiOperation(value = "Inserir um produto", tags = { "Produtos" })
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> insert(@Valid @RequestBody ProdutoDTO objDto) {
-		Produto obj = produtoService.fromDTO(objDto);
-		obj = produtoService.insert(obj);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
+	public ResponseEntity<Void> insert(@Valid @RequestBody ProdutoNewDTO produtoNewDTO) {
+		Produto produto = produtoService.fromDTO(produtoNewDTO);
+		produto = produtoService.insert(produto);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(produto.getId()).toUri();
 		return ResponseEntity.created(uri).build();
 	}
 
+	@ApiOperation(value = "Atualizar um produto", tags = { "Produtos" })
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<Void> update(@Valid @RequestBody ProdutoDTO objDto, @PathVariable Integer id) {
-		Produto obj = produtoService.fromDTO(objDto);
-		obj.setId(id);
-		obj = produtoService.update(obj);
+	public ResponseEntity<Void> update(@Valid @RequestBody ProdutoDTO produtoDTO, @PathVariable Integer id) {
+		Produto produto = produtoService.fromDTO(produtoDTO);
+		produto.setId(id);
+		produto = produtoService.update(produto);
 		return ResponseEntity.noContent().build();
 	}
 
+	@ApiOperation(value = "Deletar um produto", tags = { "Produtos" })
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> delete(@PathVariable Integer id) {
 		produtoService.delete(id);
