@@ -4,10 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.fiap.persistencia.domain.Cidade;
@@ -30,27 +31,41 @@ public class ClienteService {
 	@Autowired
 	private CidadeRepository cidadeRepository;
 
+	@Cacheable(value= "clienteCache", key= "#id")
 	public Cliente find(Integer id) {
 		Optional<Cliente> obj = clienteRepository.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! Id: " + id + ", Tipo: " + Cliente.class.getName()));
 	}
 
+	@Cacheable(value= "allClientesCache", unless= "#result.size() == 0")
 	public List<Cliente> findAll() {
 		return clienteRepository.findAll();
 	}
 
+	@Caching(
+		 put= { @CachePut(value= "clienteCache", key= "#cliente.id") },
+		 evict= { @CacheEvict(value= "allClientesCache", allEntries= true) } 
+	)
 	public Cliente insert(Cliente obj) {
 		obj.setId(null);
 		return clienteRepository.save(obj);
 	}
 
+	@Caching(
+		 put= { @CachePut(value= "clienteCache", key= "#cliente.id") },
+		 evict= { @CacheEvict(value= "allClientesCache", allEntries= true) }
+	)
 	public Cliente update(Cliente obj) {
 		Cliente newObj = find(obj.getId());
 		updateData(newObj, obj);
 		return clienteRepository.save(newObj);
 	}
 
+	@Caching(
+		 put= { @CachePut(value= "clienteCache", key= "#cliente.id") },
+		 evict= { @CacheEvict(value= "allClientesCache", allEntries= true) }
+	)
 	public void delete(Integer id) {
 		find(id);
 		try {
