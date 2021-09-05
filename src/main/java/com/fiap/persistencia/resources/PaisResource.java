@@ -19,7 +19,6 @@ import com.fiap.persistencia.domain.Pais;
 import com.fiap.persistencia.domain.dto.PaisDTO;
 import com.fiap.persistencia.services.PaisService;
 
-
 @RestController
 @RequestMapping(value = "/pais")
 public class PaisResource {
@@ -27,7 +26,6 @@ public class PaisResource {
 	@Autowired
 	private PaisService paisService;
 
-	
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<PaisDTO>> findAll() {
 		List<Pais> list = paisService.findAll();

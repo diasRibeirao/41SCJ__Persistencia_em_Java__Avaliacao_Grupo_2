@@ -7,15 +7,18 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fiap.persistencia.domain.enums.TipoCliente;
 
 @Entity
+@Table(name = "CLIENTE")
 public class Cliente implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -32,8 +35,8 @@ public class Cliente implements Serializable {
 
 	private Integer tipo;
 
-	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
-	private List<Endereco> enderecos = new ArrayList<>();
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "cliente")
+	private List<Endereco> enderecos = new ArrayList<Endereco>();
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "cliente")
@@ -44,6 +47,7 @@ public class Cliente implements Serializable {
 	}
 
 	public Cliente(Integer id, String cpfOuCnpj, String nome, String email, TipoCliente tipo) {
+		super();
 		this.id = id;
 		this.cpfOuCnpj = cpfOuCnpj;
 		this.nome = nome;
