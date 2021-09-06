@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.fiap.persistencia.domain.Cidade;
-import com.fiap.persistencia.domain.Cliente;
 import com.fiap.persistencia.domain.dto.CidadeDTO;
 import com.fiap.persistencia.services.CidadeService;
 
