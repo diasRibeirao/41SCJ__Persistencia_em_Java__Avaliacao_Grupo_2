@@ -58,7 +58,7 @@ public class ProdutoService {
 		try {
 			produtoRepository.deleteById(id);
 		} catch (DataIntegrityViolationException e) {
-			throw new DataIntegrityException("Não é possível excluir porque há pedidos relacionadas");
+			throw new DataIntegrityException("Não é possível excluir");
 		}
 	}
 

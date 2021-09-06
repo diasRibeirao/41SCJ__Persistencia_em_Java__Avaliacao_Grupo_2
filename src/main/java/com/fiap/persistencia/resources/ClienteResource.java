@@ -19,6 +19,7 @@ import com.fiap.persistencia.domain.Cliente;
 import com.fiap.persistencia.domain.Pedido;
 import com.fiap.persistencia.domain.dto.ClienteDTO;
 import com.fiap.persistencia.domain.dto.ClienteNewDTO;
+import com.fiap.persistencia.domain.dto.PedidoDto;
 import com.fiap.persistencia.services.ClienteService;
 import com.fiap.persistencia.services.PedidoService;
 
@@ -77,10 +78,13 @@ public class ClienteResource {
 		return ResponseEntity.noContent().build();
 	}
 
-	@ApiOperation(value = "Buscar os pedidos do cliente", tags = { "Pedidos" })
-	@RequestMapping(value = "/pedidos", method = RequestMethod.GET)
-	public ResponseEntity<List<Pedido>> findByCliente(@PathVariable Integer id) {
+	@ApiOperation(value = "Buscar os pedidos do cliente", tags = { "Clientes" })
+	@RequestMapping(value = "/pedidos/{id}", method = RequestMethod.GET)
+	public ResponseEntity<List<PedidoDto>> findByCliente(@PathVariable Integer id) {
 		List<Pedido> list = pedidoService.findByCliente(id);
-		return ResponseEntity.ok().body(list);
+		List<PedidoDto> listDto = list.stream().map(pedido -> new PedidoDto(pedido)).collect(Collectors.toList());
+		return ResponseEntity.ok().body(listDto);
 	}
+	
+	
 }

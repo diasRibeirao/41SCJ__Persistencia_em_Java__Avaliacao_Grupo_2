@@ -58,7 +58,7 @@ public class PaisService {
 		try {
 			paisRepository.deleteById(id);
 		} catch (DataIntegrityViolationException e) {
-			throw new DataIntegrityException("Não é possível excluir porque há pedidos relacionadas");
+			throw new DataIntegrityException("Não é possível excluir");
 		}
 	}
 

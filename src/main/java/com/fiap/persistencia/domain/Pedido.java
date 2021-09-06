@@ -5,7 +5,9 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,10 +16,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fiap.persistencia.services.validation.PedidoInsert;
 
 @Entity
-@PedidoInsert
 public class Pedido implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -32,7 +32,7 @@ public class Pedido implements Serializable {
 	@JoinColumn(name = "cliente_id")
 	private Cliente cliente;
 
-	@OneToMany(mappedBy = "id.pedido")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "id.pedido", fetch = FetchType.EAGER) 
 	private Set<ItemPedido> itens = new HashSet<ItemPedido>();
 
 	public Pedido() {
