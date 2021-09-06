@@ -66,16 +66,17 @@ public class CidadeService {
 		}
 	}
 
-	public Cidade fromDTO(CidadeDTO objDto) {
-		Cidade cidade = new Cidade(objDto.getId(), objDto.getNome());
-		Estado estado = findEstadoById(objDto.getEstadoId());
+	public Cidade fromDTO(CidadeDTO cidadeDTO) {
+		Cidade cidade = new Cidade(cidadeDTO.getId(), cidadeDTO.getNome());
+		Estado estado = findEstadoById(cidadeDTO.getEstadoId());
 
 		cidade.setEstado(estado);
 		return cidade;
 	}
 
-	private void updateData(Cidade newObj, Cidade obj) {
-		newObj.setNome(obj.getNome());
+	private void updateData(Cidade newCidade, Cidade cidade) {
+		newCidade.setNome(cidade.getNome());
+		newCidade.setEstado(cidade.getEstado());
 	}
 
 	private Estado findEstadoById(Integer estado_Id) {

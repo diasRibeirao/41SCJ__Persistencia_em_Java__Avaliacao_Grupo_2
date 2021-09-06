@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.fiap.persistencia.domain.Cidade;
+import com.fiap.persistencia.domain.Cliente;
 import com.fiap.persistencia.domain.dto.CidadeDTO;
 import com.fiap.persistencia.services.CidadeService;
 
@@ -58,7 +59,7 @@ public class CidadeResource {
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Void> update(@Valid @RequestBody CidadeDTO objDto, @PathVariable Integer id) {
 		Cidade obj = cidadeService.fromDTO(objDto);
-		obj.setId(id);
+		obj.setId(id); 
 		obj = cidadeService.update(obj);
 		return ResponseEntity.noContent().build();
 	}
