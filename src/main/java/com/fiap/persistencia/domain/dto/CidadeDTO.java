@@ -14,11 +14,11 @@ public class CidadeDTO implements Serializable {
 
 	private String nome;
 
-	private int estado_id;
+	private int estadoId;
 
 	public CidadeDTO(Cidade obj) {
 		this.id = obj.getId();
-		this.estado_id = obj.getEstado().getId();
+		this.estadoId = obj.getEstado().getId();
 		this.nome = obj.getNome();
 	}
 
@@ -42,12 +42,12 @@ public class CidadeDTO implements Serializable {
 		this.nome = nome;
 	}
 
-	public int getEstado_id() {
-		return estado_id;
+	public int getEstadoId() {
+		return estadoId;
 	}
 
-	public void setEstado_id(int estado_id) {
-		this.estado_id = estado_id;
+	public void setEstado_id(int estadoId) {
+		this.estadoId = estadoId;
 	}
 
 }

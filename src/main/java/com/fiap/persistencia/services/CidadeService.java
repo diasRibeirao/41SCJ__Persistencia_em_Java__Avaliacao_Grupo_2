@@ -68,7 +68,7 @@ public class CidadeService {
 
 	public Cidade fromDTO(CidadeDTO objDto) {
 		Cidade cidade = new Cidade(objDto.getId(), objDto.getNome());
-		Estado estado = findEstadoById(objDto.getEstado_id());
+		Estado estado = findEstadoById(objDto.getEstadoId());
 
 		cidade.setEstado(estado);
 		return cidade;
