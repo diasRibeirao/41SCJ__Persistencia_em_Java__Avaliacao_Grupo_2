@@ -25,6 +25,7 @@ public class CidadeService {
 	@Autowired
 	private CidadeRepository cidadeRepository;
 
+	@Autowired
 	private EstadoRepository estadoRepository;
 
 	@Cacheable(value = "cidadeCache", key = "#id")
